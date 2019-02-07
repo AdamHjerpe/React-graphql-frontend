@@ -1,4 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React frontend for my [graphql-server](https://github.com/AdamHjerpe/graphql-server).
 
 ## Available Scripts
 
