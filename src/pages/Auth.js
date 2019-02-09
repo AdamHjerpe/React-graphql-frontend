@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 
+import AuthContext from '../context/auth-context'
 import './Auth.scss'
 
 class AuthPage extends Component {
   state = {
     isLogin: true
   } 
+
+  static contextType = AuthContext 
 
   constructor(props) {
     super(props)
@@ -39,7 +42,7 @@ class AuthPage extends Component {
         }
       `
     }
-    // Switch to createUser mutation insted of login if this.state.isLogin is false
+    // Switch to createUser mutation insted of login query if this.state.isLogin is false
     if (!this.state.isLogin) { 
       requestBody = {
         query: `
@@ -65,7 +68,12 @@ class AuthPage extends Component {
       }
       return res.json()
     }).then(resData => {
-      console.log(resData)
+      if (resData.data.login.token)
+      this.context.login(
+        resData.data.login.token,
+        resData.data.login.userId,
+        resData.data.login.tokenExpiration
+      )
     }).catch(err => {
       console.error(err)
     })
