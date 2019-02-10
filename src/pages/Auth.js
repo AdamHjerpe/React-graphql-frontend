@@ -6,11 +6,11 @@ import './Auth.scss'
 class AuthPage extends Component {
   state = {
     isLogin: true
-  } 
+  }
 
-  static contextType = AuthContext 
+  static contextType = AuthContext
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.emailEl = React.createRef()
     this.passwordEl = React.createRef()
@@ -18,7 +18,7 @@ class AuthPage extends Component {
 
   switchModeHandler = () => {
     this.setState(prevState => {
-      return {isLogin: !prevState.isLogin}
+      return { isLogin: !prevState.isLogin }
     })
   }
 
@@ -43,7 +43,7 @@ class AuthPage extends Component {
       `
     }
     // Switch to createUser mutation insted of login query if this.state.isLogin is false
-    if (!this.state.isLogin) { 
+    if (!this.state.isLogin) {
       requestBody = {
         query: `
           mutation {
@@ -55,8 +55,8 @@ class AuthPage extends Component {
         `
       }
     }
-    
-    fetch('http://localhost:8000/graphql', {
+    console.log(process.env)
+    fetch(process.env.REACT_APP_GRAPHQL_HOST, {
       method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
@@ -68,12 +68,13 @@ class AuthPage extends Component {
       }
       return res.json()
     }).then(resData => {
-      if (resData.data.login.token)
-      this.context.login(
-        resData.data.login.token,
-        resData.data.login.userId,
-        resData.data.login.tokenExpiration
-      )
+      if (resData.data.login.token) {
+        this.context.login(
+          resData.data.login.token,
+          resData.data.login.userId,
+          resData.data.login.tokenExpiration
+        )
+      }
     }).catch(err => {
       console.error(err)
     })
